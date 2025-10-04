@@ -1,4 +1,9 @@
 // --- Configurações da Simulação ---
+if (window.nblGameInitialized) {
+  console.log('Jogo NBL já foi inicializado');
+} else {
+  window.nblGameInitialized = true;
+
 const CONTAINER = document.getElementById('simulador-container');
 if (!CONTAINER) {
   console.error('Container não encontrado!');
@@ -115,11 +120,14 @@ if (!CONTAINER) {
 
       if (this.type === 'parafuso' || this.type === 'chave' ||
           this.type === 'fusivel-quebrado' || this.type === 'fusivel-novo') {
-        if (this.x < MARGIN_WARNING || this.x > WIDTH - MARGIN_WARNING ||
-            this.y < MARGIN_WARNING || this.y > HEIGHT - MARGIN_WARNING) {
-          document.getElementById('aviso').style.display = 'block';
-        } else {
-          document.getElementById('aviso').style.display = 'none';
+        const avisoEl = document.getElementById('aviso');
+        if (avisoEl) {
+          if (this.x < MARGIN_WARNING || this.x > WIDTH - MARGIN_WARNING ||
+              this.y < MARGIN_WARNING || this.y > HEIGHT - MARGIN_WARNING) {
+            avisoEl.style.display = 'block';
+          } else {
+            avisoEl.style.display = 'none';
+          }
         }
       }
 
@@ -570,4 +578,5 @@ if (!CONTAINER) {
   atualizarHUD();
 
   setInterval(loop, TIME_STEP);
+}
 }

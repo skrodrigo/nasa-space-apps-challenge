@@ -6,21 +6,26 @@ import Particles from '@/components/Particles'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const spaceBackgrounds = [
-  { id: 1, src: '/earth.jpg', name: 'Earth' },
-  { id: 2, src: '/sun.jpg', name: 'Sun' },
-  { id: 3, src: '/moon.jpg', name: 'Moon' },
-  { id: 4, src: '/mars.jpg', name: 'Mars' },
+  { id: 1, src: '/cupole/earth.jpg', name: 'Earth' },
+  { id: 2, src: '/cupole/sun.jpg', name: 'Sun' },
+  { id: 3, src: '/cupole/moon.jpg', name: 'Moon' },
+  { id: 4, src: '/cupole/blackhole.jpg', name: 'Blackhole' },
 ]
 
 const spaceObjects = [
-  { id: 1, name: 'METEORITE', image: '/meteorite.png' },
-  { id: 2, name: 'ROCKET', image: '/rocket.png' },
-  { id: 3, name: 'UFO', image: '/ufo.png' },
+  { id: 1, name: 'METEORITE', image: '/cupole/meteorite.png' },
+  { id: 2, name: 'ROCKET', image: '/cupole/rocket.png' },
+  { id: 3, name: 'UFO', image: '/cupole/ufo.png' },
 ]
 
 export default function Home() {
   const [currentBg, setCurrentBg] = useState(0)
   const [launchedObjects, setLaunchedObjects] = useState<Array<{ id: number, name: string, image: string, timestamp: number }>>([])
+  const [fadeOut, setFadeOut] = useState(false)
+
+  React.useEffect(() => {
+    setFadeOut(true)
+  }, [])
 
   const launchObject = (obj: typeof spaceObjects[0]) => {
     const newObj = {
@@ -37,11 +42,19 @@ export default function Home() {
   }
 
   return (
-    <div className='relative h-screen w-screen overflow-hidden'>
+    <div className='relative h-screen w-screen overflow-hidden bg-black'>
+      {/* Fade Out Effect */}
+      <motion.div
+        initial={{ opacity: 1 }}
+        animate={{ opacity: fadeOut ? 0 : 1 }}
+        transition={{ duration: 1.5, ease: 'easeInOut' }}
+        className='absolute inset-0 z-[9999] bg-black pointer-events-none'
+      />
+
       <motion.button
         initial={{ x: -100, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
-        transition={{ delay: 0.3 }}
+        transition={{ delay: 1.5 }}
         onClick={() => window.history.back()}
         className='absolute top-6 left-6 z-50 bg-black border-2 border-zinc-700 px-4 py-3 shadow-[0_0_0_4px_#000000] hover:border-cyan-500 transition-all group'
         whileHover={{ scale: 1.05 }}
@@ -123,7 +136,7 @@ export default function Home() {
         }}
         className='absolute inset-0 scale-110 z-30'
       >
-        <Image src="/base.png" quality={100} priority alt="Base" width={1920} height={1080} className='w-full h-full object-cover' />
+        <Image src="/cupole/base.png" quality={100} priority alt="Base" width={1920} height={1080} className='w-full h-full object-cover' />
       </motion.div>
 
       <div className='absolute inset-0 pointer-events-none z-40'>

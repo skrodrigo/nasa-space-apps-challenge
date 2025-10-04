@@ -13,6 +13,15 @@ export default function MenuPage() {
   const [selectedIndex, setSelectedIndex] = useState(0)
   const router = useRouter()
 
+  const selectOption = React.useCallback(() => {
+    const selected = menuOptions[selectedIndex]
+    if (selected.action === 'cupola') {
+      router.push('/cupola')
+    } else if (selected.action === 'nbl') {
+      router.push('/nbl')
+    }
+  }, [selectedIndex, router])
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       event.preventDefault()
@@ -32,21 +41,12 @@ export default function MenuPage() {
 
     document.addEventListener('keydown', handleKeyDown)
     return () => document.removeEventListener('keydown', handleKeyDown)
-  }, [selectedIndex])
-
-  const selectOption = () => {
-    const selected = menuOptions[selectedIndex]
-    if (selected.action === 'cupola') {
-      router.push('/cupola')
-    } else if (selected.action === 'nbl') {
-      router.push('/nbl')
-    }
-  }
+  }, [selectOption])
 
   return (
     <div className='relative h-screen w-screen overflow-hidden bg-black flex items-center justify-center'>
       {/* Background Stars */}
-      <div 
+      <div
         className='absolute inset-0 opacity-30'
         style={{
           backgroundImage: 'radial-gradient(#333333 1px, transparent 0), radial-gradient(#333333 1px, transparent 0)',
@@ -95,8 +95,8 @@ export default function MenuPage() {
               onMouseEnter={() => setSelectedIndex(index)}
               className={`
                 text-[10px] font-[family-name:var(--font-press-start)] py-2 px-0 cursor-pointer transition-all
-                ${selectedIndex === index 
-                  ? 'bg-zinc-800 text-white border border-cyan-500' 
+                ${selectedIndex === index
+                  ? 'bg-zinc-800 text-white border border-cyan-500'
                   : 'text-zinc-600 hover:text-cyan-500'
                 }
               `}
