@@ -6,10 +6,10 @@ import Particles from '@/components/Particles'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const spaceBackgrounds = [
-  { id: 1, src: '/cupole/earth.jpg', name: 'Earth' },
-  { id: 2, src: '/cupole/sun.jpg', name: 'Sun' },
-  { id: 3, src: '/cupole/moon.jpg', name: 'Moon' },
-  { id: 4, src: '/cupole/blackhole.jpg', name: 'Blackhole' },
+  { id: 1, src: '/cupole/earth.jpg', name: 'Earth', color: '#4D7094' },
+  { id: 2, src: '/cupole/sun.jpg', name: 'Sun', color: '#B81004' },
+  { id: 3, src: '/cupole/moon.jpg', name: 'Moon', color: '#968575' },
+  { id: 4, src: '/cupole/blackhole.jpg', name: 'Blackhole', color: '#000000' },
 ]
 
 const spaceObjects = [
@@ -86,7 +86,6 @@ export default function Home() {
             alt={spaceBackgrounds[currentBg].name}
             fill
             className='object-cover'
-            priority
           />
         </motion.div>
       </AnimatePresence>
@@ -134,9 +133,22 @@ export default function Home() {
           repeat: Infinity,
           ease: "easeInOut"
         }}
-        className='absolute inset-0 scale-110 z-30'
+        className='absolute inset-0 scale-110 z-30 relative'
       >
-        <Image src="/cupole/base.png" quality={100} priority alt="Base" width={1920} height={1080} className='w-full h-full object-cover' />
+        <Image src="/cupole/base.png" quality={100} alt="Base" width={1920} height={1080} className='w-full h-full object-cover' />
+
+        {/* Colored light overlay */}
+        <motion.div
+          key={`overlay-${currentBg}`}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1 }}
+          className='absolute inset-0'
+          style={{
+            background: `radial-gradient(ellipse 70% 50% at 50% 40%, ${spaceBackgrounds[currentBg].color}99 0%, ${spaceBackgrounds[currentBg].color}66 20%, ${spaceBackgrounds[currentBg].color}33 40%, transparent 70%)`,
+            mixBlendMode: 'color',
+          }}
+        />
       </motion.div>
 
       <div className='absolute inset-0 pointer-events-none z-40'>

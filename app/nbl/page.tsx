@@ -178,23 +178,23 @@ export default function NBLPage() {
             className='w-[800px] h-[600px] border-2 z-20 border-zinc-700 relative overflow-hidden bg-[#0f0f1a] shadow-[0_0_1000px_rgba(0,170,170,0.5)] cursor-default'
           >
             <div id="instrucoes" className='absolute top-2.5 left-2.5 text-white bg-black/70 px-[15px] py-2.5 rounded text-[0.6em] max-w-[300px] leading-[1.4] font-[family-name:var(--font-press-start)]'>
-              <strong>MISSÃO:</strong> Abra a caixa de energia!<br />
-              1. Arraste a chave até cada parafuso<br />
-              2. Clique 3x em cada um para soltar<br />
-              3. NÃO deixe nada sair da tela!
+              <strong>MISSION:</strong> Open the power box!<br />
+              1. Drag the wrench to each screw<br />
+              2. Click 3x on each to unscrew<br />
+              3. DON'T let anything leave the screen!
             </div>
             <div id="hud" className='absolute top-2.5 right-2.5 text-cyan-500 bg-black/70 px-[15px] py-2.5 rounded text-xs font-bold text-right font-[family-name:var(--font-press-start)]'>
-              Parafusos: <span id="parafusos-count">4/4</span><br />
-              <span id="aviso" className="text-orange-500 animate-pulse hidden">⚠ CUIDADO!</span><br />
+              Screws: <span id="parafusos-count">4/4</span><br />
+              <span id="aviso" className="text-orange-500 animate-pulse hidden">⚠ WARNING!</span><br />
               <small id="debug-info" className='text-[0.6em] text-zinc-600'></small>
             </div>
             <div id="vitoria" className='hidden absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-cyan-500/90 text-black px-[50px] py-[30px] rounded-lg text-xl font-bold z-[1000] font-[family-name:var(--font-press-start)]'>
-              MISSÃO COMPLETA! <br />
-              <small className='text-[0.4em]'>Manutenção realizada com sucesso!</small>
+              MISSION COMPLETE! <br />
+              <small className='text-[0.4em]'>Maintenance successfully performed!</small>
             </div>
             <div id="game-over" className='hidden absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-orange-500/90 text-white px-[50px] py-[30px] rounded-lg text-xl font-bold z-[1000] font-[family-name:var(--font-press-start)]'>
-              FALHA NA MISSÃO!<br />
-              <small className='text-[0.4em]'>Equipamento perdido no espaço<br />Recarregue a página para tentar novamente</small>
+              MISSION FAILED!<br />
+              <small className='text-[0.4em]'>Equipment lost in space<br />Reload the page to try again</small>
             </div>
           </div>
         </>
