@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
+import Particles from '@/components/Particles'
 
 const menuOptions = [
   { id: 1, label: 'START GAME (NBL)', action: 'nbl' },
@@ -65,6 +66,19 @@ export default function MenuPage() {
           50% { opacity: 0; }
         }
       `}</style>
+
+      <div className='absolute inset-0 pointer-events-none z-5'>
+        <Particles
+          particleColors={['#ffffff', '#ffffff']}
+          particleCount={200}
+          particleSpread={10}
+          speed={0.01}
+          particleBaseSize={5}
+          moveParticlesOnHover={true}
+          alphaParticles={false}
+          disableRotation={false}
+        />
+      </div>
 
       {/* Menu Container */}
       <motion.div
