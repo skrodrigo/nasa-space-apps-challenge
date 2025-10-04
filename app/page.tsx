@@ -6,41 +6,38 @@ import Particles from '@/components/Particles'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const spaceBackgrounds = [
-  { id: 1, src: '/terra.jpg', name: 'Terra' },
-  { id: 2, src: '/sol.jpg', name: 'Sol' },
-  { id: 3, src: '/moon.jpg', name: 'Lua' },
-  { id: 4, src: '/mars.jpg', name: 'Marte' },
+  { id: 1, src: '/earth.jpg', name: 'Earth' },
+  { id: 2, src: '/sun.jpg', name: 'Sun' },
+  { id: 3, src: '/moon.jpg', name: 'Moon' },
+  { id: 4, src: '/mars.jpg', name: 'Mars' },
 ]
 
 const spaceObjects = [
-  { id: 1, name: 'METEORITO' },
-  { id: 3, name: 'ROCKET' },
-  { id: 4, name: 'UFO' },
-  { id: 5, name: 'ASTEROIDE' },
+  { id: 1, name: 'METEORITE', image: '/meteorite.png' },
+  { id: 2, name: 'ROCKET', image: '/rocket.png' },
+  { id: 3, name: 'UFO', image: '/ufo.png' },
 ]
 
 export default function Home() {
   const [currentBg, setCurrentBg] = useState(0)
-  const [launchedObjects, setLaunchedObjects] = useState<Array<{ id: number, name: string, x: number, y: number, timestamp: number }>>([])
+  const [launchedObjects, setLaunchedObjects] = useState<Array<{ id: number, name: string, image: string, timestamp: number }>>([])
 
   const launchObject = (obj: typeof spaceObjects[0]) => {
     const newObj = {
       id: Date.now(),
       name: obj.name,
-      x: Math.random() * 80 + 10,
-      y: Math.random() * 80 + 10,
+      image: obj.image,
       timestamp: Date.now()
     }
     setLaunchedObjects(prev => [...prev, newObj])
 
     setTimeout(() => {
       setLaunchedObjects(prev => prev.filter(o => o.id !== newObj.id))
-    }, 5000)
+    }, 10000)
   }
 
   return (
     <div className='relative h-screen w-screen overflow-hidden'>
-      {/* Back Button - Top Left */}
       <motion.button
         initial={{ x: -100, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
@@ -56,7 +53,6 @@ export default function Home() {
         </div>
       </motion.button>
 
-      {/* Background Image - Layer 1 (fundo) */}
       <AnimatePresence mode="wait">
         <motion.div
           key={currentBg}
@@ -82,7 +78,39 @@ export default function Home() {
         </motion.div>
       </AnimatePresence>
 
-      {/* Base SVG - Layer 2 (meio) */}
+      <AnimatePresence>
+        {launchedObjects.map((obj) => (
+          <motion.div
+            key={obj.id}
+            initial={{
+              scale: 0.1,
+              x: '-5vw',
+              y: '-20vh',
+            }}
+            animate={{
+              scale: [0.1, 0.3, 0.5, 0.8, 1.2, 1.5],
+              x: '100vw',
+              y: '100vh',
+            }}
+            exit={{ scale: 0, opacity: 0 }}
+            transition={{
+              scale: { duration: 10, ease: "easeIn" },
+              x: { duration: 10, ease: "linear" },
+              y: { duration: 10, ease: "linear" },
+            }}
+            className='absolute pointer-events-none z-20'
+          >
+            <Image
+              src={obj.image}
+              alt={obj.name}
+              width={100}
+              height={100}
+              className='object-contain'
+            />
+          </motion.div>
+        ))}
+      </AnimatePresence>
+
       <motion.div
         animate={{
           y: [0, -3, 0],
@@ -93,13 +121,12 @@ export default function Home() {
           repeat: Infinity,
           ease: "easeInOut"
         }}
-        className='absolute inset-0 scale-110'
+        className='absolute inset-0 scale-110 z-30'
       >
         <Image src="/base.png" quality={100} priority alt="Base" width={1920} height={1080} className='w-full h-full object-cover' />
       </motion.div>
 
-      {/* Particles - Layer 3 (topo) */}
-      <div className='absolute inset-0 pointer-events-none'>
+      <div className='absolute inset-0 pointer-events-none z-40'>
         <Particles
           particleColors={['#ffffff', '#ffffff']}
           particleCount={200}
@@ -112,29 +139,6 @@ export default function Home() {
         />
       </div>
 
-      {/* Launched Objects */}
-      <AnimatePresence>
-        {launchedObjects.map((obj) => (
-          <motion.div
-            key={obj.id}
-            initial={{ scale: 0, rotate: 0 }}
-            animate={{
-              scale: [0, 1.5, 1],
-              rotate: 360,
-              x: [0, Math.random() * 200 - 100],
-              y: [0, Math.random() * 200 - 100]
-            }}
-            exit={{ scale: 0, opacity: 0 }}
-            transition={{ duration: 5, ease: "easeOut" }}
-            className='absolute text-[10px] font-bold text-white pointer-events-none z-50 bg-black px-3 py-2 border-2 border-cyan-500 font-[family-name:var(--font-press-start)] shadow-[0_0_10px_rgba(0,170,170,0.5)]'
-            style={{ left: `${obj.x}%`, top: `${obj.y}%` }}
-          >
-            {obj.name}
-          </motion.div>
-        ))}
-      </AnimatePresence>
-
-      {/* Left Panel - Space Backgrounds */}
       <div className='absolute left-6 top-1/2 -translate-y-1/2 z-40 flex flex-col gap-3'>
         <motion.div
           initial={{ x: -100, opacity: 0 }}
@@ -143,7 +147,7 @@ export default function Home() {
           className='bg-black border-2 border-zinc-700 p-4 shadow-[0_0_0_4px_#000000]'
           style={{ imageRendering: 'pixelated' }}
         >
-          <h3 className='text-white text-[8px] font-bold mb-4 tracking-wider font-[family-name:var(--font-press-start)] border-b-2 border-cyan-500 pb-2'>CENÁRIOS</h3>
+          <h3 className='text-white text-[8px] font-bold mb-4 tracking-wider font-[family-name:var(--font-press-start)] border-b-2 border-cyan-500 pb-2'>SCENARIOS</h3>
           <div className='flex flex-col gap-2'>
             {spaceBackgrounds.map((bg, index) => (
               <motion.button
@@ -151,11 +155,10 @@ export default function Home() {
                 onClick={() => setCurrentBg(index)}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className={`px-3 py-2 text-[8px] tracking-wider transition-all font-[family-name:var(--font-press-start)] relative ${
-                  currentBg === index
-                    ? 'bg-zinc-800 text-white border border-cyan-500'
-                    : 'bg-transparent text-zinc-600 hover:text-cyan-500'
-                }`}
+                className={`px-3 py-2 text-[8px] tracking-wider transition-all font-[family-name:var(--font-press-start)] relative ${currentBg === index
+                  ? 'bg-zinc-800 text-white border border-cyan-500'
+                  : 'bg-transparent text-zinc-600 hover:text-cyan-500'
+                  }`}
                 style={{ textRendering: 'geometricPrecision' }}
               >
                 {currentBg === index && (
@@ -180,7 +183,7 @@ export default function Home() {
           className='bg-black border-2 border-zinc-700 p-4 shadow-[0_0_0_4px_#000000]'
           style={{ imageRendering: 'pixelated' }}
         >
-          <h3 className='text-white text-[8px] font-bold mb-4 tracking-wider font-[family-name:var(--font-press-start)] border-b-2 border-cyan-500 pb-2'>LANÇAR</h3>
+          <h3 className='text-white text-[8px] font-bold mb-4 tracking-wider font-[family-name:var(--font-press-start)] border-b-2 border-cyan-500 pb-2'>LAUNCH</h3>
           <div className='flex flex-col gap-2'>
             {spaceObjects.map((obj, index) => (
               <motion.button
