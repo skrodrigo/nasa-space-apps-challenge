@@ -4,6 +4,8 @@ import React, { useState } from 'react'
 import Image from 'next/image'
 import Particles from '@/components/Particles'
 import { motion, AnimatePresence } from 'framer-motion'
+import Link from 'next/link'
+
 
 const spaceBackgrounds = [
   { id: 1, src: '/cupola/earth.jpg', name: 'Earth', color: '#4D7094' },
@@ -57,15 +59,16 @@ export default function Home() {
         initial={{ x: -100, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ delay: 1.5 }}
-        onClick={() => window.history.back()}
         className='absolute top-6 left-6 z-50 bg-black border-2 border-zinc-700 px-4 py-3 shadow-[0_0_0_4px_#000000] hover:border-cyan-500 transition-all group'
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
       >
-        <div className='flex items-center gap-2'>
-          <span className='text-orange-500 text-[10px] font-[family-name:var(--font-press-start)] group-hover:animate-pulse'>{'<'}</span>
-          <span className='text-white text-[8px] font-[family-name:var(--font-press-start)] tracking-wider group-hover:text-cyan-500'>MENU</span>
-        </div>
+        <Link href="/menu">
+          <div className='flex items-center gap-2'>
+            <span className='text-orange-500 text-[10px] font-[family-name:var(--font-press-start)] group-hover:animate-pulse'>{'<'}</span>
+            <span className='text-white text-[8px] font-[family-name:var(--font-press-start)] tracking-wider group-hover:text-cyan-500'>MENU</span>
+          </div>
+        </Link>
       </motion.button>
 
       <motion.button

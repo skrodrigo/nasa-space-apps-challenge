@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
+import Link from 'next/link'
 
 const spaceBackgrounds = [
   { id: 1, src: '/cupola/earth.jpg', name: 'Earth', color: '#4D7094' },
@@ -14,6 +15,7 @@ export default function Cupola360() {
   const [currentBg, setCurrentBg] = useState(0)
   const [mounted, setMounted] = useState(false)
   const [fadeOut, setFadeOut] = useState(false)
+  const [launchedObjects, setLaunchedObjects] = useState<Array<{ id: number, name: string, image: string, timestamp: number }>>([])
 
   useEffect(() => {
     // Load A-Frame scripts
@@ -57,7 +59,6 @@ export default function Cupola360() {
     }
   }
 
-
   return (
     <div className='relative h-screen w-screen overflow-hidden bg-black'>
       {/* Fade Out Effect - Astronaut opening eyes with bounce */}
@@ -81,14 +82,15 @@ export default function Cupola360() {
         initial={{ x: -100, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ delay: 0.5 }}
-        onClick={() => window.history.back()}
         className='absolute top-6 left-6 z-50 bg-black border-2 border-zinc-700 px-4 py-3 shadow-[0_0_0_4px_#030203] hover:border-cyan-500 transition-all group'
         style={{ position: 'fixed' }}
       >
-        <div className='flex items-center gap-2'>
-          <span className='text-orange-500 text-[10px] font-[family-name:var(--font-press-start)] group-hover:animate-pulse'>{'<'}</span>
-          <span className='text-white text-[8px] font-[family-name:var(--font-press-start)] tracking-wider group-hover:text-cyan-500'>CUPOLA</span>
-        </div>
+        <Link href="/cupola">
+          <div className='flex items-center gap-2'>
+            <span className='text-orange-500 text-[10px] font-[family-name:var(--font-press-start)] group-hover:animate-pulse'>{'<'}</span>
+            <span className='text-white text-[8px] font-[family-name:var(--font-press-start)] tracking-wider group-hover:text-cyan-500'>CUPOLA NO 360º</span>
+          </div>
+        </Link>
       </motion.button>
 
       {/* Scenario Selector */}
@@ -125,19 +127,20 @@ export default function Cupola360() {
         </motion.div>
       </div>
 
+
       {/* Navigation Buttons */}
-      <div className='absolute right-32 bottom-6 z-40 flex flex-col gap-3' style={{ position: 'fixed' }}>
+      <div className='absolute right-6 bottom-6 z-40 flex flex-row gap-3' style={{ position: 'fixed' }}>
         <motion.button
           initial={{ y: 100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.7 }}
-          onClick={moveForward}
-          className='bg-black border-2 border-zinc-700 p-4 shadow-[0_0_0_4px_#030203] hover:border-cyan-500 transition-all group'
+          onClick={moveBackward}
+          className='bg-black border-2 border-zinc-700 p-4 shadow-[0_0_0_4px_#030203] hover:border-orange-500 transition-all group'
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
           <div className='flex items-center justify-center'>
-            <span className='text-cyan-500 text-[16px] font-[family-name:var(--font-press-start)] group-hover:animate-pulse'>↑</span>
+            <span className='text-orange-500 text-[16px] font-[family-name:var(--font-press-start)] group-hover:animate-pulse'>-</span>
           </div>
         </motion.button>
 
@@ -145,13 +148,13 @@ export default function Cupola360() {
           initial={{ y: 100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.8 }}
-          onClick={moveBackward}
-          className='bg-black border-2 border-zinc-700 p-4 shadow-[0_0_0_4px_#030203] hover:border-orange-500 transition-all group'
+          onClick={moveForward}
+          className='bg-black border-2 border-zinc-700 p-4 shadow-[0_0_0_4px_#030203] hover:border-cyan-500 transition-all group'
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
           <div className='flex items-center justify-center'>
-            <span className='text-orange-500 text-[16px] font-[family-name:var(--font-press-start)] group-hover:animate-pulse'>↓</span>
+            <span className='text-cyan-500 text-[16px] font-[family-name:var(--font-press-start)] group-hover:animate-pulse'>+</span>
           </div>
         </motion.button>
       </div>

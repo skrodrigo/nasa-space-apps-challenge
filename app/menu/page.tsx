@@ -7,7 +7,7 @@ import Particles from '@/components/Particles'
 
 const menuOptions = [
   { id: 1, label: 'START GAME (NBL)', action: 'nbl' },
-  { id: 2, label: 'GO TO CUPOLA', action: 'cupola' },
+  { id: 2, label: 'GO TO CUPOLA 360º', action: 'cupola' },
 ]
 
 export default function MenuPage() {
@@ -17,7 +17,7 @@ export default function MenuPage() {
   const selectOption = React.useCallback(() => {
     const selected = menuOptions[selectedIndex]
     if (selected.action === 'cupola') {
-      router.push('/cupola')
+      router.push('/cupola-360')
     } else if (selected.action === 'nbl') {
       router.push('/nbl')
     }
@@ -89,12 +89,12 @@ export default function MenuPage() {
       >
         {/* Title */}
         <h1 className='text-white text-[16px] font-[family-name:var(--font-press-start)] mb-1 tracking-wider border-b-2 border-cyan-500 pb-1'>
-          ORBITAL WRENCH!
+          OVERVIEW EFFECT
         </h1>
 
         {/* Subtitle */}
         <div className='text-zinc-600 text-[7px] font-[family-name:var(--font-press-start)] mt-2 mb-8'>
-          M.E. PROTOCOL 86 | BEYOND GRAVITY
+          NASA SPACE APPS CHALLENGE
         </div>
 
         {/* Menu Options */}
