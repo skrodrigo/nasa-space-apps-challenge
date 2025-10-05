@@ -6,18 +6,18 @@ import Particles from '@/components/Particles'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const spaceBackgrounds = [
-  { id: 1, src: '/cupole/earth.jpg', name: 'Earth', color: '#4D7094' },
-  { id: 2, src: '/cupole/sun.mp4', name: 'Sun', color: '#794D01' },
-  { id: 3, src: '/cupole/moon.jpg', name: 'Moon', color: '#968575' },
-  { id: 4, src: '/cupole/mars.mp4', name: 'Mars', color: '#5C4931' },
-  { id: 5, src: '/cupole/saturn.mp4', name: 'Saturn', color: '#000000' },
-  { id: 6, src: '/cupole/boreal.mp4', name: 'Borealis', color: '#000000' },
+  { id: 1, src: '/cupola/earth.jpg', name: 'Earth', color: '#4D7094' },
+  { id: 2, src: '/cupola/sun.mp4', name: 'Sun', color: '#794D01' },
+  { id: 3, src: '/cupola/moon.jpg', name: 'Moon', color: '#968575' },
+  { id: 4, src: '/cupola/mars.mp4', name: 'Mars', color: '#5C4931' },
+  { id: 5, src: '/cupola/saturn.mp4', name: 'Saturn', color: '#000000' },
+  { id: 6, src: '/cupola/boreal.mp4', name: 'Borealis', color: '#000000' },
 ]
 
 const spaceObjects = [
-  { id: 1, name: 'METEORITE', image: '/cupole/meteorite.png' },
-  { id: 2, name: 'ROCKET', image: '/cupole/rocket.png' },
-  { id: 3, name: 'UFO', image: '/cupole/ufo.png' },
+  { id: 1, name: 'METEORITE', image: '/cupola/meteorite.png' },
+  { id: 2, name: 'ROCKET', image: '/cupola/rocket.png' },
+  { id: 3, name: 'UFO', image: '/cupola/ufo.png' },
 ]
 
 export default function Home() {
@@ -163,7 +163,7 @@ export default function Home() {
         }}
         className='absolute inset-0 scale-110 z-30 relative'
       >
-        <Image src="/cupole/base.png" quality={100} alt="Base" width={1920} height={1080} className='w-full h-full object-cover' />
+        <Image src="/cupola/base.png" quality={100} alt="Base" width={1920} height={1080} className='w-full h-full object-cover' />
 
         {/* Colored light overlay */}
         <motion.div
