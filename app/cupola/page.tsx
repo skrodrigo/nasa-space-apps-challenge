@@ -7,9 +7,11 @@ import { motion, AnimatePresence } from 'framer-motion'
 
 const spaceBackgrounds = [
   { id: 1, src: '/cupole/earth.jpg', name: 'Earth', color: '#4D7094' },
-  { id: 2, src: '/cupole/sun.jpg', name: 'Sun', color: '#B81004' },
+  { id: 2, src: '/cupole/sun.mp4', name: 'Sun', color: '#794D01' },
   { id: 3, src: '/cupole/moon.jpg', name: 'Moon', color: '#968575' },
-  { id: 4, src: '/cupole/blackhole.jpg', name: 'Blackhole', color: '#000000' },
+  { id: 4, src: '/cupole/mars.mp4', name: 'Mars', color: '#5C4931' },
+  { id: 5, src: '/cupole/saturn.mp4', name: 'Saturn', color: '#000000' },
+  { id: 6, src: '/cupole/boreal.mp4', name: 'Borealis', color: '#000000' },
 ]
 
 const spaceObjects = [
@@ -81,12 +83,23 @@ export default function Home() {
           }}
           className='absolute inset-0 scale-110'
         >
-          <Image
-            src={spaceBackgrounds[currentBg].src}
-            alt={spaceBackgrounds[currentBg].name}
-            fill
-            className='object-cover'
-          />
+          {spaceBackgrounds[currentBg].src.endsWith('.mp4') ? (
+            <video
+              src={spaceBackgrounds[currentBg].src}
+              autoPlay
+              loop
+              muted
+              playsInline
+              className='w-full h-full object-cover'
+            />
+          ) : (
+            <Image
+              src={spaceBackgrounds[currentBg].src}
+              alt={spaceBackgrounds[currentBg].name}
+              fill
+              className='object-cover'
+            />
+          )}
         </motion.div>
       </AnimatePresence>
 
