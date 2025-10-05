@@ -68,6 +68,21 @@ export default function Home() {
         </div>
       </motion.button>
 
+      <motion.button
+        initial={{ x: 100, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        transition={{ delay: 1.5 }}
+        onClick={() => window.location.href = '/cupola-360'}
+        className='absolute top-6 right-6 z-50 bg-black border-2 border-zinc-700 px-4 py-3 shadow-[0_0_0_4px_#000000] hover:border-orange-500 transition-all group'
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+      >
+        <div className='flex items-center gap-2'>
+          <span className='text-cyan-500 text-[10px] font-[family-name:var(--font-press-start)] group-hover:animate-pulse'>360°</span>
+          <span className='text-white text-[8px] font-[family-name:var(--font-press-start)] tracking-wider group-hover:text-orange-500'>VIEW</span>
+        </div>
+      </motion.button>
+
       <AnimatePresence mode="wait">
         <motion.div
           key={currentBg}
