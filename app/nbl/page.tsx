@@ -1,6 +1,8 @@
 'use client'
 
 import React, { useEffect } from 'react'
+import { motion } from 'framer-motion'
+import Particles from '@/components/Particles'
 
 export default function NBLGamePage() {
   const [mounted, setMounted] = React.useState(false)
@@ -126,7 +128,7 @@ export default function NBLGamePage() {
 
         this.element.style.transform = `translate(${this.x - this.radius}px, ${this.y - this.radius}px)`
         this.isDragging = false
-        CONTAINER.appendChild(this.element)
+        CONTAINER?.appendChild(this.element)
 
         this.element.addEventListener('mousedown', this.startDrag.bind(this))
         this.element.addEventListener('touchstart', this.startDrag.bind(this))
@@ -202,7 +204,9 @@ export default function NBLGamePage() {
         document.addEventListener('touchmove', drag, { passive: false })
         document.addEventListener('touchend', endDrag)
 
-        CONTAINER.style.cursor = 'grabbing'
+        if (CONTAINER) {
+          CONTAINER.style.cursor = 'grabbing'
+        }
       }
     }
 
@@ -232,7 +236,7 @@ export default function NBLGamePage() {
         this.interior.style.height = `${height}px`
         this.interior.style.backgroundImage = 'url(/nbl/caixaaberta.png)'
         this.interior.style.zIndex = '40'
-        CONTAINER.appendChild(this.interior)
+        CONTAINER?.appendChild(this.interior)
 
         this.element = document.createElement('div')
         this.element.className = 'caixa brilho-vermelho'
@@ -243,7 +247,7 @@ export default function NBLGamePage() {
         this.element.style.backgroundImage = 'url(/nbl/caixafechada-erro.png)'
         this.element.style.transition = 'transform 1s ease-out, background-image 0.5s ease-out'
         this.element.style.zIndex = '50'
-        CONTAINER.appendChild(this.element)
+        CONTAINER?.appendChild(this.element)
 
         let positions: any[] = []
         if (numParafusos === 4) {
@@ -297,7 +301,7 @@ export default function NBLGamePage() {
           slotInterior.style.backgroundPosition = 'center'
           slotInterior.style.imageRendering = 'pixelated'
           slotInterior.style.display = 'none'
-          CONTAINER.appendChild(slotInterior)
+          CONTAINER?.appendChild(slotInterior)
 
           this.parafusosSlots.push({
             x: this.x + pos.x + 12,
@@ -554,7 +558,9 @@ export default function NBLGamePage() {
           document.removeEventListener('touchend', endDrag)
           isDragging = false
           draggedObject = null
-          CONTAINER.style.cursor = 'default'
+          if (CONTAINER) {
+            CONTAINER.style.cursor = 'default'
+          }
           return
         }
       }
@@ -580,13 +586,19 @@ export default function NBLGamePage() {
 
       isDragging = false
       draggedObject = null
-      CONTAINER.style.cursor = 'default'
+      if (CONTAINER) {
+        CONTAINER.style.cursor = 'default'
+      }
     }
 
     function criarExplosao(x: number, y: number) {
-      CONTAINER.style.animation = 'tela-tremer 0.5s'
+      if (CONTAINER) {
+        CONTAINER.style.animation = 'tela-tremer 0.5s'
+      }
       setTimeout(() => {
-        CONTAINER.style.animation = ''
+        if (CONTAINER) {
+          CONTAINER.style.animation = ''
+        }
       }, 500)
 
       for (let i = 0; i < 80; i++) {
@@ -612,7 +624,7 @@ export default function NBLGamePage() {
           particula.style.width = `${tamanho}px`
           particula.style.height = `${tamanho}px`
 
-          CONTAINER.appendChild(particula)
+          CONTAINER?.appendChild(particula)
 
           particula.animate([
             { left: `${x}px`, top: `${y}px` },
@@ -665,7 +677,7 @@ export default function NBLGamePage() {
           confete.style.width = `${tamanho}px`
           confete.style.height = `${tamanho}px`
 
-          CONTAINER.appendChild(confete)
+          CONTAINER?.appendChild(confete)
 
           setTimeout(() => {
             confete.remove()
@@ -913,7 +925,9 @@ export default function NBLGamePage() {
           document.removeEventListener('touchend', endDrag)
           isDragging = false
           draggedObject = null
-          CONTAINER.style.cursor = 'default'
+          if (CONTAINER) {
+            CONTAINER.style.cursor = 'default'
+          }
         }
 
         obj.type = 'fusivel-fixo'
@@ -983,7 +997,7 @@ export default function NBLGamePage() {
         const delayMover = Math.random() * 3
         estrela.style.animationDelay = `${delayPiscar}s, ${delayMover}s`
 
-        CONTAINER.appendChild(estrela)
+        CONTAINER?.appendChild(estrela)
       }
     }
 
@@ -1002,7 +1016,7 @@ export default function NBLGamePage() {
       const duracao = Math.random() * 2 + 1
       meteoro.style.animation = `meteoro-cair ${duracao}s linear`
 
-      CONTAINER.appendChild(meteoro)
+      CONTAINER?.appendChild(meteoro)
 
       setTimeout(() => {
         meteoro.remove()
@@ -1107,39 +1121,32 @@ export default function NBLGamePage() {
           align-items: center;
           min-height: 100vh;
           margin: 0;
-          background: linear-gradient(45deg,
-            #330000, #331100, #110033,
-            #000033, #110022, #220033, #330000);
-          background-size: 400% 400%;
-          font-family: sans-serif;
+          padding: 0;
+          background: #000000;
+          font-family: var(--font-press-start), monospace;
           overflow: hidden;
           -webkit-tap-highlight-color: transparent;
           -webkit-touch-callout: none;
-          animation: rainbow-bg 10s ease infinite;
         }
 
-        @keyframes rainbow-bg {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
+        @keyframes starField {
+          from { background-position: 0 0, 4px 4px; }
+          to { background-position: 100px 100px, 104px 104px; }
         }
 
         #simulador-container {
-          width: 800px;
-          height: 600px;
-          max-width: 100vw;
-          max-height: 100vh;
-          border: 3px solid #ff0000;
+          width: 1000px;
+          height: calc(100vh - 100px);
+          max-width: calc(100vw - 400px);
+          max-height: calc(100vh - 100px);
+          border: 2px solid #00ffff;
+          border-radius: 0;
           position: relative;
           overflow: hidden;
-          background-color: #0f0f1a;
-          box-shadow:
-            0 0 20px rgba(255, 0, 0, 0.8),
-            0 0 40px rgba(255, 0, 0, 0.6),
-            inset 0 0 60px rgba(255, 0, 0, 0.3);
+          background-color: #000000;
           cursor: default;
           touch-action: none;
-          animation: borda-perigo 2s ease-in-out infinite;
+          margin: 0 auto;
         }
 
         @keyframes borda-perigo {
@@ -1197,33 +1204,41 @@ export default function NBLGamePage() {
 
         #instrucoes {
           position: absolute;
-          top: 10px;
-          left: 10px;
-          color: #ffffff;
-          background: rgba(0, 0, 0, 0.7);
-          padding: 10px 15px;
-          border-radius: 5px;
-          font-size: 0.85em;
-          max-width: 300px;
-          line-height: 1.4;
+          top: 16px;
+          left: 16px;
+          color: #00ff00;
+          background: #000000;
+          padding: 12px 16px;
+          border: 2px solid #3f3f46;
+          box-shadow: 0 0 0 4px #000000;
+          font-size: 8px;
+          max-width: 200px;
+          line-height: 1.3;
+          z-index: 1000;
+          font-family: var(--font-press-start), monospace;
         }
 
         #hud {
           position: absolute;
-          top: 10px;
-          right: 10px;
-          color: #00ff00;
-          background: rgba(0, 0, 0, 0.7);
-          padding: 10px 15px;
-          border-radius: 5px;
-          font-size: 1em;
-          font-weight: bold;
-          text-align: right;
+          top: 16px;
+          right: 16px;
+          color: #00ffff;
+          background: #000000;
+          padding: 12px 16px;
+          border: 2px solid #3f3f46;
+          box-shadow: 0 0 0 4px #000000;
+          font-size: 8px;
+          font-weight: normal;
+          text-align: left;
+          z-index: 1000;
+          font-family: var(--font-press-start), monospace;
+          max-width: 150px;
         }
 
         .parafuso-aviso {
           color: #ff3333;
           animation: pulse 1s infinite;
+{{ ... }}
         }
 
         .tempo-critico {
@@ -1434,12 +1449,13 @@ export default function NBLGamePage() {
           left: 50%;
           transform: translate(-50%, -50%);
           color: #fff;
-          padding: 30px 50px;
+          padding: 20px 40px;
           border-radius: 10px;
-          font-size: 5em;
+          font-size: 3em;
           font-weight: bold;
           display: none;
           z-index: 1000;
+          background: rgba(0, 0, 0, 0.95);
           text-shadow:
             0 0 20px rgba(0, 255, 255, 1),
             0 0 40px rgba(0, 255, 255, 0.8),
@@ -1515,12 +1531,13 @@ export default function NBLGamePage() {
           left: 50%;
           transform: translate(-50%, -50%);
           color: #ff0000;
-          padding: 30px 50px;
+          padding: 20px 40px;
           border-radius: 10px;
-          font-size: 5em;
+          font-size: 3em;
           font-weight: bold;
           display: none;
           z-index: 1000;
+          background: rgba(0, 0, 0, 0.95);
           text-shadow:
             0 0 20px rgba(255, 0, 0, 1),
             0 0 40px rgba(255, 0, 0, 0.8),
@@ -1531,14 +1548,14 @@ export default function NBLGamePage() {
         }
 
         .btn-reiniciar {
-          margin-top: 30px;
-          padding: 15px 40px;
-          font-size: 0.4em;
+          margin-top: 20px;
+          padding: 10px 30px;
+          font-size: 0.35em;
           font-weight: bold;
           background: linear-gradient(135deg, #ff0000, #cc0000);
           color: #fff;
-          border: 3px solid #fff;
-          border-radius: 10px;
+          border: 2px solid #fff;
+          border-radius: 8px;
           cursor: pointer;
           transition: all 0.3s;
           box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
@@ -1554,35 +1571,36 @@ export default function NBLGamePage() {
           transform: scale(0.95);
         }
 
+
         .btn-musica {
-          position: absolute;
-          top: 10px;
-          left: 50%;
-          transform: translateX(-50%);
+          position: fixed;
+          bottom: 20px;
+          right: 20px;
           width: 50px;
           height: 50px;
-          background: rgba(0, 0, 0, 0.7);
-          border: 2px solid #00ffff;
-          border-radius: 50%;
+          background: #000000;
+          border: 2px solid #3f3f46;
+          border-radius: 0;
           cursor: pointer;
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 1.5em;
+          font-size: 1.2em;
           color: #00ffff;
           transition: all 0.3s;
           z-index: 1001;
           user-select: none;
+          box-shadow: 0 0 0 4px #000000;
         }
 
         .btn-musica:hover {
           background: rgba(0, 255, 255, 0.2);
-          transform: translateX(-50%) scale(1.1);
+          transform: scale(1.1);
           box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
         }
 
         .btn-musica:active {
-          transform: translateX(-50%) scale(0.9);
+          transform: scale(0.9);
         }
 
         .btn-musica.mutado {
@@ -1598,6 +1616,31 @@ export default function NBLGamePage() {
 
       {mounted && (
         <>
+          {/* Background Stars */}
+          <div
+            className='absolute inset-0 opacity-30'
+            style={{
+              backgroundImage: 'radial-gradient(#333333 1px, transparent 0), radial-gradient(#333333 1px, transparent 0)',
+              backgroundSize: '8px 8px',
+              backgroundPosition: '0 0, 4px 4px',
+              animation: 'starField 300s linear infinite'
+            }}
+          />
+
+          {/* Particles */}
+          <div className='absolute inset-0 pointer-events-none z-5'>
+            <Particles
+              particleColors={['#ffffff', '#ffffff']}
+              particleCount={200}
+              particleSpread={10}
+              speed={0.01}
+              particleBaseSize={5}
+              moveParticlesOnHover={true}
+              alphaParticles={false}
+              disableRotation={false}
+            />
+          </div>
+
           <audio id="musica-fundo" loop autoPlay muted>
             <source src="https://cdn.pixabay.com/download/audio/2025/03/04/audio_ca24b52b25.mp3?filename=lofi-girl-309226.mp3" type="audio/mpeg" />
           </audio>
@@ -1632,28 +1675,28 @@ export default function NBLGamePage() {
               left: 0,
               width: '100vw',
               height: '100vh',
-              background: 'rgba(0, 0, 0, 0.9)',
+              background: 'rgba(0, 0, 0, 0.95)',
               zIndex: 9999,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               flexDirection: 'column',
               cursor: 'pointer',
-              fontFamily: 'sans-serif',
+              fontFamily: 'var(--font-press-start), monospace',
               textAlign: 'center'
             }}
           >
             <button
               style={{
                 color: '#fff',
-                fontSize: '1.5em',
+                fontSize: '3em',
                 background: 'rgba(0, 255, 255, 0.2)',
                 padding: '20px 40px',
                 border: '3px solid #00ffff',
-                borderRadius: '15px',
+                borderRadius: '10px',
                 boxShadow: '0 0 30px rgba(0, 255, 255, 0.5)',
                 cursor: 'pointer',
-                fontFamily: 'sans-serif',
+                fontFamily: 'var(--font-press-start), monospace',
                 fontWeight: 'bold'
               }}
             >
@@ -1662,13 +1705,47 @@ export default function NBLGamePage() {
             <p style={{ color: '#888', fontSize: '0.9em', marginTop: '20px' }}>🔊 Music will start</p>
           </div>
 
+          {/* Top Navigation Buttons */}
+          <motion.button
+            initial={{ x: -100, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            onClick={() => window.location.href = '/menu'}
+            className='absolute top-6 left-6 z-[2000] bg-black border-2 border-zinc-700 px-4 py-3 shadow-[0_0_0_4px_#000000] hover:border-orange-500 transition-all group'
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <div className='flex items-center gap-2'>
+              <span className='text-orange-500 text-[10px] font-[family-name:var(--font-press-start)] group-hover:animate-pulse'>{'<'}</span>
+              <span className='text-white text-[8px] font-[family-name:var(--font-press-start)] tracking-wider group-hover:text-orange-500'>MENU</span>
+            </div>
+          </motion.button>
+
+          <motion.button
+            initial={{ x: -100, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ delay: 0.4 }}
+            onClick={() => window.location.reload()}
+            className='absolute top-[70px] left-6 z-[2000] bg-black border-2 border-zinc-700 px-4 py-3 shadow-[0_0_0_4px_#000000] hover:border-cyan-500 transition-all group'
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <div className='flex items-center gap-2'>
+              <span className='text-cyan-500 text-[10px] font-[family-name:var(--font-press-start)] group-hover:animate-pulse'>↻</span>
+              <span className='text-white text-[8px] font-[family-name:var(--font-press-start)] tracking-wider group-hover:text-cyan-500'>RESTART</span>
+            </div>
+          </motion.button>
+
+          {/* Music Button - Centered */}
+          <button id="btn-musica" className="btn-musica" title="Mute/Unmute music">🔊</button>
+
           <div id="simulador-container">
-            <button id="btn-musica" className="btn-musica" title="Mute/Unmute music">🔊</button>
+            {/* Information Panels - Inside simulator */}
             <div id="instrucoes">
               <strong>MISSION:</strong> Replace the fuse in 45s!<br />
               1. Drag and drop the wrench on screws (3x each)<br />
               2. Remove the broken fuse<br />
-              3. DON&apos;T let anything leave the screen!
+              3. DON&apos;t let anything leave the screen!
             </div>
             <div id="hud">
               Time: <span id="tempo-count">45s</span><br />
@@ -1676,6 +1753,7 @@ export default function NBLGamePage() {
               <span id="aviso" className="parafuso-aviso" style={{ display: 'none' }}>⚠ WARNING!</span><br />
               <small id="debug-info" style={{ fontSize: '0.7em', color: '#888' }}></small>
             </div>
+
             <div id="vitoria" className="vitoria">
               <div id="vitoria-texto">YOU WIN!</div>
               <div id="nivel-texto" style={{ fontSize: '0.3em', marginTop: '20px' }}>LEVEL 1</div>
