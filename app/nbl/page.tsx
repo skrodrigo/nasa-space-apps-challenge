@@ -33,6 +33,19 @@ export default function NBLGamePage() {
     const CONTAINER = document.getElementById('simulador-container')
     if (!CONTAINER) return
 
+    // Force mobile fullscreen
+    if (window.innerWidth <= 768) {
+      CONTAINER.style.width = '100vw'
+      CONTAINER.style.height = '100vh'
+      CONTAINER.style.position = 'fixed'
+      CONTAINER.style.top = '0'
+      CONTAINER.style.left = '0'
+      CONTAINER.style.margin = '0'
+      CONTAINER.style.padding = '0'
+      CONTAINER.style.border = 'none'
+      CONTAINER.style.borderRadius = '0'
+    }
+
     const WIDTH = CONTAINER.clientWidth
     const HEIGHT = CONTAINER.clientHeight
     const FPS = 60
@@ -350,7 +363,8 @@ export default function NBLGamePage() {
           for (let i = 0; i < this.parafusosSlots.length; i++) {
             const slot = this.parafusosSlots[i]
             if (!slot.removed && !slot.processando) {
-              const chaveX = obj.x + 40
+              const chaveOffset = window.innerWidth <= 768 ? 25 : 40
+              const chaveX = obj.x + chaveOffset
               const dx = chaveX - slot.x
               const dy = obj.y - slot.y
               const dist = Math.sqrt(dx * dx + dy * dy)
@@ -382,8 +396,9 @@ export default function NBLGamePage() {
                     slot.slotTampa.style.transform = ''
                     slot.slotTampa.style.filter = ''
 
+                    const parafusoSize = window.innerWidth <= 768 ? 16 : 22
                     const parafuso = new FloatingObject(
-                      slot.x, slot.y, 22, 'transparent',
+                      slot.x, slot.y, parafusoSize, 'transparent',
                       (Math.random() - 0.5) * 100,
                       (Math.random() - 0.5) * 100,
                       'parafuso', 'parafusosolto.png'
@@ -765,8 +780,9 @@ export default function NBLGamePage() {
 
       caixa = new Caixa(WIDTH / 2 - 150, HEIGHT / 2 - 112, 300, 225, numParafusos)
 
+      const chaveSize = window.innerWidth <= 768 ? 60 : 100
       chaveDeFenda = new FloatingObject(
-        100, 100, 100, 'transparent',
+        100, 100, chaveSize, 'transparent',
         30, 40,
         'chave', 'chavedefenda.png'
       )
@@ -1035,8 +1051,9 @@ export default function NBLGamePage() {
     parafusosRestantes = numParafusos
     caixa = new Caixa(WIDTH / 2 - 150, HEIGHT / 2 - 112, 300, 225, numParafusos)
 
+    const chaveSize = window.innerWidth <= 768 ? 60 : 90
     chaveDeFenda = new FloatingObject(
-      100, 100, 90, 'transparent',
+      100, 100, chaveSize, 'transparent',
       30, 40,
       'chave', 'chavedefenda.png'
     )
@@ -1066,50 +1083,42 @@ export default function NBLGamePage() {
     setInterval(loop, TIME_STEP)
 
     const musica = document.getElementById('musica-fundo') as HTMLAudioElement
-    const btnMusica = document.getElementById('btn-musica')
     const overlayMusica = document.getElementById('overlay-musica')
     let musicaTocando = false
 
     overlayMusica?.addEventListener('click', function () {
-      if (musica) {
+      if (overlayMusica) {
         musica.muted = false
         musica.play().then(() => {
           musicaTocando = true
-          if (btnMusica) {
-            btnMusica.textContent = '🔊'
-            btnMusica.classList.remove('mutado')
-          }
           if (overlayMusica) {
             overlayMusica.style.opacity = '0'
-            overlayMusica.style.transition = 'opacity 0.5s'
             setTimeout(() => {
               overlayMusica.style.display = 'none'
-              iniciarCronometro()
             }, 500)
           }
         }).catch(err => {
-          console.log('Erro ao tocar música:', err)
+          console.log('Erro ao iniciar música:', err)
         })
       }
     })
 
-    btnMusica?.addEventListener('click', function () {
-      if (musicaTocando) {
-        musica?.pause()
-        if (btnMusica) {
-          btnMusica.textContent = '🔇'
-          btnMusica.classList.add('mutado')
+    // Add resize listener for mobile
+    const handleResize = () => {
+      if (window.innerWidth <= 768) {
+        const container = document.getElementById('simulador-container')
+        if (container) {
+          container.style.width = '100vw'
+          container.style.height = '100vh'
+          container.style.position = 'fixed'
+          container.style.top = '0'
+          container.style.left = '0'
         }
-        musicaTocando = false
-      } else {
-        musica?.play().catch(err => console.log('Erro ao tocar música:', err))
-        if (btnMusica) {
-          btnMusica.textContent = '🔊'
-          btnMusica.classList.remove('mutado')
-        }
-        musicaTocando = true
       }
-    })
+    }
+
+    window.addEventListener('resize', handleResize)
+    window.addEventListener('orientationchange', handleResize)
   }
 
   return (
@@ -1164,19 +1173,83 @@ export default function NBLGamePage() {
           }
         }
 
-        @media (max-width: 800px) {
+        @media (max-width: 768px) {
+          html, body {
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow: hidden !important;
+            height: 100vh !important;
+            width: 100vw !important;
+            display: block !important;
+            justify-content: unset !important;
+            align-items: unset !important;
+            position: relative !important;
+          }
+
+          /* Remove any container constraints on mobile */
+          * {
+            box-sizing: border-box;
+          }
+
+          /* Override any Tailwind or other framework styles */
+          .absolute, .relative, .fixed {
+            position: static !important;
+          }
+
+          #simulador-container.absolute,
+          #simulador-container.relative,
+          #simulador-container.fixed {
+            position: fixed !important;
+          }
+
           #simulador-container {
-            width: 100vw;
-            height: 100vh;
+            width: 100vw !important;
+            height: 100vh !important;
+            max-width: 100vw !important;
+            max-height: 100vh !important;
+            min-width: 100vw !important;
+            min-height: 100vh !important;
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            border: none !important;
+            border-radius: 0 !important;
+            z-index: 1000;
+            transform: none !important;
           }
 
           #instrucoes {
-            font-size: 0.7em;
-            max-width: 200px;
+            font-size: 0.35em;
+            max-width: 120px;
+            padding: 6px;
+            top: 4px;
+            left: 4px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 3px;
+            line-height: 1.2;
           }
 
           #hud {
-            font-size: 0.8em;
+            font-size: 0.4em;
+            padding: 6px;
+            bottom: 4px;
+            left: 4px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 3px;
+            line-height: 1.2;
+          }
+
+          .btn-musica {
+            display: none !important;
+          }
+
+          .parafuso-slot {
+            width: 28px !important;
+            height: 28px !important;
           }
         }
 
@@ -1206,33 +1279,34 @@ export default function NBLGamePage() {
           position: absolute;
           top: 16px;
           left: 16px;
-          color: #00ff00;
-          background: #000000;
-          padding: 12px 16px;
-          border: 2px solid #3f3f46;
-          box-shadow: 0 0 0 4px #000000;
-          font-size: 8px;
-          max-width: 200px;
-          line-height: 1.3;
-          z-index: 1000;
+          background: rgba(0, 0, 0, 0.9);
+          color: #fff;
+          padding: 10px;
+          border-radius: 6px;
+          font-size: 0.65em;
+          max-width: 280px;
+          border: 2px solid #00ffff;
+          box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+          z-index: 1100;
           font-family: var(--font-press-start), monospace;
+          line-height: 1.3;
         }
 
         #hud {
           position: absolute;
-          top: 16px;
-          right: 16px;
-          color: #00ffff;
-          background: #000000;
-          padding: 12px 16px;
-          border: 2px solid #3f3f46;
-          box-shadow: 0 0 0 4px #000000;
-          font-size: 8px;
-          font-weight: normal;
-          text-align: left;
-          z-index: 1000;
+          bottom: 16px;
+          left: 16px;
+          background: rgba(0, 0, 0, 0.9);
+          color: #fff;
+          padding: 10px;
+          border-radius: 6px;
+          font-size: 0.7em;
+          border: 2px solid #ff6600;
+          box-shadow: 0 0 20px rgba(255, 102, 0, 0.3);
+          z-index: 1100;
           font-family: var(--font-press-start), monospace;
-          max-width: 150px;
+          max-width: 140px;
+          line-height: 1.3;
         }
 
         .parafuso-aviso {
@@ -1572,46 +1646,6 @@ export default function NBLGamePage() {
         }
 
 
-        .btn-musica {
-          position: fixed;
-          bottom: 20px;
-          right: 20px;
-          width: 50px;
-          height: 50px;
-          background: #000000;
-          border: 2px solid #3f3f46;
-          border-radius: 0;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 1.2em;
-          color: #00ffff;
-          transition: all 0.3s;
-          z-index: 1001;
-          user-select: none;
-          box-shadow: 0 0 0 4px #000000;
-        }
-
-        .btn-musica:hover {
-          background: rgba(0, 255, 255, 0.2);
-          transform: scale(1.1);
-          box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
-        }
-
-        .btn-musica:active {
-          transform: scale(0.9);
-        }
-
-        .btn-musica.mutado {
-          color: #ff0000;
-          border-color: #ff0000;
-        }
-
-        .btn-musica.mutado:hover {
-          background: rgba(255, 0, 0, 0.2);
-          box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
-        }
       `}</style>
 
       {mounted && (
@@ -1705,13 +1739,13 @@ export default function NBLGamePage() {
             <p style={{ color: '#888', fontSize: '0.9em', marginTop: '20px' }}>🔊 Music will start</p>
           </div>
 
-          {/* Top Navigation Buttons */}
+          {/* Top Navigation Buttons - Hidden on mobile */}
           <motion.button
             initial={{ x: -100, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ delay: 0.2 }}
             onClick={() => window.location.href = '/menu'}
-            className='absolute top-6 left-6 z-[2000] bg-black border-2 border-zinc-700 px-4 py-3 shadow-[0_0_0_4px_#000000] hover:border-orange-500 transition-all group'
+            className='absolute top-6 left-6 z-[2000] bg-black border-2 border-zinc-700 px-4 py-3 shadow-[0_0_0_4px_#000000] hover:border-orange-500 transition-all group hidden md:flex'
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -1726,7 +1760,7 @@ export default function NBLGamePage() {
             animate={{ x: 0, opacity: 1 }}
             transition={{ delay: 0.4 }}
             onClick={() => window.location.reload()}
-            className='absolute top-[70px] left-6 z-[2000] bg-black border-2 border-zinc-700 px-4 py-3 shadow-[0_0_0_4px_#000000] hover:border-cyan-500 transition-all group'
+            className='absolute top-[70px] left-6 z-[2000] bg-black border-2 border-zinc-700 px-4 py-3 shadow-[0_0_0_4px_#000000] hover:border-cyan-500 transition-all group hidden md:flex'
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -1736,8 +1770,7 @@ export default function NBLGamePage() {
             </div>
           </motion.button>
 
-          {/* Music Button - Centered */}
-          <button id="btn-musica" className="btn-musica" title="Mute/Unmute music">🔊</button>
+          {/* Music Button - Removed for mobile optimization */}
 
           <div id="simulador-container">
             {/* Information Panels - Inside simulator */}
